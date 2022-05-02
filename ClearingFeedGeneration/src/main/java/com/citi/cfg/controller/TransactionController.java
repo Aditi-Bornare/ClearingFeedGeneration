@@ -15,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.citi.cfg.service.ReadFileService;
+import com.citi.cfg.service.UploadService;
+
 //Tomcat Jasper is responsible to convert jsp to servlet so add dependency from maven
 
 @Controller
-public class TransactionController {
-
+public class TransactionController 
+{
+	private String filename;
+	
 	@RequestMapping("/")
 	public String index() 
 	{
@@ -44,37 +49,35 @@ public class TransactionController {
 		return "upload.jsp";
 	}
 
-	//Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "D://CitiBridge//Project//files//";
-    
     @RequestMapping(value="/uploadfile", method= RequestMethod.POST) // //new annotation since 4.3
-    public String singleFileUpload(@RequestBody MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-    	System.out.println(file);
-        if (file.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-            return "redirect:uploadStatus";
-        }
-
-        try {
-
-            // Get the file and save it somewhere
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-            Files.write(path, bytes);
-
-            redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getOriginalFilename() + "'");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public String singleFileUpload(@RequestBody MultipartFile file, RedirectAttributes redirectAttributes) 
+    {
+    	UploadService uploadServie=new UploadService();
+    	boolean flag=uploadServie.uploadFile(file);
+    	filename=file.getOriginalFilename();
+    	if(!flag)
+    	{
+    		redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+    	}
+    	else
+    	{
+    		redirectAttributes.addFlashAttribute("message",
+	                "You successfully uploaded '" + file.getOriginalFilename() + "'");
+    	}
         return "redirect:/uploadStatus";
     }
 
     @GetMapping("/uploadStatus")
-    public String uploadStatus() {
+    public String uploadStatus() 
+    {
         return "uploadStatus.jsp";
+    }
+    
+    @RequestMapping("/validtran")
+    public String getValidTransactions() throws IOException
+    {
+    	ReadFileService readFileService=new ReadFileService(filename);
+    	readFileService.readFile();
+    	return "validTransactions.jsp";
     }
 }
