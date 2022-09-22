@@ -12,7 +12,7 @@ import com.citi.cfg.bean.UserSpring;
 public class UserDetailsImpl implements UserDetails {
 
 	private UserSpring userSpring;
-	
+
 	public UserDetailsImpl(UserSpring userSpring) {
 		super();
 		this.userSpring = userSpring;

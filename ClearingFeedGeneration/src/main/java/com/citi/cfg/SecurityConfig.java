@@ -10,45 +10,33 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter 
-{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Bean
-	public AuthenticationProvider authProvider()
-	{
+	public AuthenticationProvider authProvider() {
 //		AuthenticationProvider is responsible for login page
-		
+
 //		The below class is used to communicate with database
 //		Class that communicates with database is called as DAO class or repository class
-		DaoAuthenticationProvider provider= new DaoAuthenticationProvider();
-		
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+
 //		Four ORM Tools: jdbc,spring jdbc,jpa,hibernate
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(new BCryptPasswordEncoder());
 		return provider;
 	}
-	
+
 	@Override
-	protected void configure(HttpSecurity http) throws Exception 
-	{
-		http
-			.csrf().disable()
-			.authorizeRequests().antMatchers("/login").permitAll()
-			.anyRequest().authenticated()
-			.and()
-			.formLogin()
-			.loginPage("/login").permitAll()
-			.and()
-			.logout().invalidateHttpSession(true)
-			.clearAuthentication(true)
-			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-			.logoutSuccessUrl("/logout-success").permitAll();
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeRequests().antMatchers("/login").permitAll().anyRequest().authenticated().and()
+				.formLogin().loginPage("/login").permitAll().and().logout().invalidateHttpSession(true)
+				.clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/logout-success").permitAll();
 	}
 }
