@@ -1,27 +1,6 @@
 <!-- PHP code to establish connection with the localserver -->
-<?php
- 
-
-$user = 'root';
-$password = 'Rutuja@123';
-$database = 'dbr';
-$servername='localhost:3306';
-$mysqli = new mysqli($servername, $user,
-                $password, $database);
- 
-
-if ($mysqli->connect_error) {
-    die('Connect Error (' .
-    $mysqli->connect_errno . ') '.
-    $mysqli->connect_error);
-}
- 
-
-$sql = " select * from main_table; ";
-$result = $mysqli->query($sql);
-$mysqli->close();
-?>
 <!-- HTML code to display data in tabular format -->
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
  
@@ -68,29 +47,28 @@ $mysqli->close();
         <h1>Transaction Status</h1>
         <!-- TABLE CONSTRUCTION -->
         <table>
-            <tr>
-                <th>Reference Id</th>
-                <th>Value Date</th>
-                <th>payer Account</th>
-                <th>payer name</th>
-            </tr>
-            <!-- PHP CODE TO FETCH DATA FROM ROWS -->
-            <?php
-                // LOOP TILL END OF DATA
-                while($rows=$result->fetch_assoc())
-                {
-            ?>
-            <tr>
-                <!-- FETCHING DATA FROM EACH
-                    ROW OF EVERY COLUMN -->
-                <td><?php echo $rows['transactionRef'];?></td>
-                <td><?php echo $rows['valueDate'];?></td>
-                <td><?php echo $rows['payerName'];?></td>
-                <td><?php echo $rows['payerAccount'];?></td>
-            </tr>
-            <?php
-                }
-            ?>
+            <thead>
+                <tr>
+                    <th>TransactionRef</th>
+                    <th>Value Date</th>
+                    <th>Payer</th>
+                    <th>Payee</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${transactions}" var="transaction">
+                    <tr>
+                        <td>${transaction.transactionRef}</td>
+                        <td>${transaction.valueDate}</td>
+                        <td>${transaction.payerName}</td>
+                        <td>${transaction.payeeName}</td>
+                        <td>${transaction.amount}</td>
+                        <td>${transaction.status}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
         </table>
     </section>
 </body>

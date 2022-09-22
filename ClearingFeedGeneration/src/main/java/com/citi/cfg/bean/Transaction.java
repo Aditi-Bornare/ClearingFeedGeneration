@@ -5,10 +5,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name="main_table")
 public class Transaction {
-	String url = "jdbc:mysql://localhost:3306/dbr";
-	String User = "root";
-	String Pass = "Gouri_1234";
+
+	@Id
 	private String transactionRef;
 	private String valueDate;
 	private String payerName;
@@ -16,103 +24,11 @@ public class Transaction {
 	private String payeeName;
 	private String payeeAccount;
 	private float amount;
+	private String status;
 
 	public Transaction() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public Transaction(String transactionRef, String valueDate, String payerName, String payerAccount, String payeeName,
-			String payeeAccount, float amount) {
-		super();
-		this.transactionRef = transactionRef;
-		this.valueDate = valueDate;
-		this.payerName = payerName;
-		this.payerAccount = payerAccount;
-		this.payeeName = payeeName;
-		this.payeeAccount = payeeAccount;
-		this.amount = amount;
-
-	}
-
-	public String getTransactionRef() {
-		return transactionRef;
-	}
-
-	public void setTransactionRef(String transactionRef) {
-		this.transactionRef = transactionRef;
-
-	}
-
-	public String getValueDate() {
-		return valueDate;
-	}
-
-	public void setValueDate(String valueDate) {
-		this.valueDate = valueDate;
-	}
-
-	public String getPayerName() {
-		return payerName;
-	}
-
-	public void setPayerName(String payerName) {
-		this.payerName = payerName;
-	}
-
-	public String getPayerAccount() {
-		return payerAccount;
-	}
-
-	public void setPayerAccount(String payerAccount) {
-		this.payerAccount = payerAccount;
-	}
-
-	public String getPayeeName() {
-		return payeeName;
-	}
-
-	public void setPayeeName(String payeeName) {
-		this.payeeName = payeeName;
-	}
-
-	public String getPayeeAccount() {
-		return payeeAccount;
-	}
-
-	public void setPayeeeAccount(String payeeAccount) {
-		this.payeeAccount = payeeAccount;
-	}
-
-	public float getAmount() {
-		return amount;
-	}
-
-	public void setAmount(float amount) {
-		this.amount = amount;
-	}
-
-	public void datbasefun() throws SQLException {
-		Connection conn = null;
-		conn = DriverManager.getConnection(url, User, Pass);
-		System.out.println("database");
-		String query = "insert into main_table (transactionRef,valueDate,payerName,payerAccount ,payeeName, payeeAccount,amount,status)"
-				+ "Values(?,?,?,?,?,?,?,?)";
-		PreparedStatement p_stat;
-		p_stat = conn.prepareStatement(query);
-		p_stat.setString(1, transactionRef);
-		p_stat.setString(2, valueDate);
-		p_stat.setString(3, payerName);
-		p_stat.setString(4, payerAccount);
-		p_stat.setString(5, payeeName);
-		p_stat.setString(6, payeeAccount);
-		p_stat.setFloat(7, amount);
-		String status = "Successfull";
-		if (status_of_transaction() == false) {
-			status = "failed";
-		}
-		p_stat.setString(8, status);
-		p_stat.execute();
 	}
 
 	public boolean status_of_transaction() {
@@ -146,16 +62,16 @@ public class Transaction {
 
 	}
 
-	@Override
-	public String toString() {
-		// status_of_transaction();
-		try {
-			datbasefun();
-		} catch (SQLException e) {
-
-		}
-		return "transaction [transactionRef=" + transactionRef + ", valueDate=" + valueDate + ", payerName=" + payerName
-				+ ", payerAccount=" + payerAccount + ", payeeName=" + payeeName + ", payeeAccount=" + payeeAccount
-				+ ", amount=" + amount + "]";
-	}
+//	@Override
+//	public String toString() {
+//		// status_of_transaction();
+//		try {
+////			datbasefun();
+////		} catch (SQLException e) {
+//
+//		}
+//		return "transaction [transactionRef=" + transactionRef + ", valueDate=" + valueDate + ", payerName=" + payerName
+//				+ ", payerAccount=" + payerAccount + ", payeeName=" + payeeName + ", payeeAccount=" + payeeAccount
+//				+ ", amount=" + amount + "]";
+//	}
 }

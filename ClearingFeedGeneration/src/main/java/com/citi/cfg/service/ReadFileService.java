@@ -15,11 +15,9 @@ import com.citi.cfg.bean.Transaction;
 import com.citi.cfg.config.Config;
 
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @NoArgsConstructor
-@Slf4j
 public class ReadFileService {
 	private String filename;
 
@@ -36,8 +34,8 @@ public class ReadFileService {
 	public ReadFileService(String filename) {
 		this.filename = filename;
 	}
-
-	public void readFile() throws IOException {
+	
+	public ArrayList<Transaction> readFile() throws IOException {
 		filepath = filepath + filename;
 		File file = new File(filepath);
 
@@ -55,16 +53,21 @@ public class ReadFileService {
 			t.setPayerAccount(details[1].substring(0, 12));
 			t.setPayeeName(details[1].substring(12));
 
-			t.setPayeeeAccount(details[2].substring(0, 12));
+			t.setPayeeAccount(details[2].substring(0, 12));
 
 			t.setAmount(Float.parseFloat(details[3]));
+			
+			if(t.status_of_transaction()) {
+				t.setStatus("Successful");
+			}
+			else {
+				t.setStatus("Failed");
+			}
 
 			ar.add(t);
 		}
-		for (Transaction j : ar) {
-			log.info(j.toString());
-		}
 		br.close();
+		return ar;
 	}
 
 }
