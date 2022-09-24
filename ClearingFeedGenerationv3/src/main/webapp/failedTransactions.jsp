@@ -6,7 +6,7 @@
  
 <head>
     <meta charset="UTF-8">
-    <title>Valid Transactions</title>
+    <title>Failed Transactions</title>
     <!-- CSS FOR STYLING THE PAGE -->
     <style>
         table {
@@ -24,7 +24,7 @@
         }
  
         td {
-            background-color: #E4F5D4;
+            background-color: #FF0000;
             border: 1px solid black;
         }
  
@@ -71,9 +71,6 @@
             </tbody>
         </table>
     </section>
-    <div style="align-items: center; padding-bottom:10px; padding-top:10px; padding-left: 120px;">
-        <a href="failedtran"><button>View Failed Transactions</button></a>
-    </div>
 </body>
  
 </html>

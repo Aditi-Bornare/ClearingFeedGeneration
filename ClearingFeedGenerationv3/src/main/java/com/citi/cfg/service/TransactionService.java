@@ -23,6 +23,13 @@ public class TransactionService {
 	public List<Transaction> getAllTransactions()
 	{
 		List<Transaction> transactions= new ArrayList<Transaction>();
+		transactionRepository.findAll().forEach(transactions::add);
+		return transactions;
+	}
+	
+	public List<Transaction> getFailedTransactions()
+	{
+		List<Transaction> transactions= new ArrayList<Transaction>();
 		List<Transaction> failedTransactions= new ArrayList<Transaction>();
 		transactionRepository.findAll().forEach(transactions::add);
 		for(Transaction t:transactions) {

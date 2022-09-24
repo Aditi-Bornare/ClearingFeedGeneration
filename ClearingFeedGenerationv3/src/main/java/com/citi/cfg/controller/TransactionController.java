@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,5 +84,18 @@ public class TransactionController {
 		model.addAttribute("transactions", transactionService.getAllTransactions());
 
 		return "validTransactions.jsp";
+	}
+	
+	@RequestMapping("/failedtran")
+	public String getFailedTransactions(Model model) throws IOException {
+		ReadFileService readFileService = new ReadFileService(filename);
+		transactions= readFileService.readFile();
+		for(Transaction t: transactions) {
+			log.info(t.toString());
+			transactionService.addTransaction(t);
+		}
+		model.addAttribute("transactions", transactionService.getFailedTransactions());
+
+		return "failedTransactions.jsp";
 	}
 }

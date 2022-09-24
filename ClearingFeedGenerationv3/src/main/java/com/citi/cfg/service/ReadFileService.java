@@ -15,9 +15,11 @@ import com.citi.cfg.bean.Transaction;
 import com.citi.cfg.config.Config;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @NoArgsConstructor
+@Slf4j
 public class ReadFileService {
 	private String filename;
 
@@ -34,7 +36,7 @@ public class ReadFileService {
 	public ReadFileService(String filename) {
 		this.filename = filename;
 	}
-	
+
 	public ArrayList<Transaction> readFile() throws IOException {
 		filepath = filepath + filename;
 		File file = new File(filepath);
@@ -42,29 +44,32 @@ public class ReadFileService {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
 		ArrayList<Transaction> ar = new ArrayList<Transaction>();
-		while ((line = br.readLine()) != null) {
-			Transaction t = new Transaction();
-			String[] details = line.split("\\s+");
+		try {
+			while ((line = br.readLine()) != null) {
+				Transaction t = new Transaction();
+				String[] details = line.split("\\s+");
 
-			t.setTransactionRef(details[0].substring(0, 12));
-			t.setValueDate(details[0].substring(12, 20));
-			t.setPayerName(details[0].substring(20));
+				t.setTransactionRef(details[0].substring(0, 12));
+				t.setValueDate(details[0].substring(12, 20));
+				t.setPayerName(details[0].substring(20));
 
-			t.setPayerAccount(details[1].substring(0, 12));
-			t.setPayeeName(details[1].substring(12));
+				t.setPayerAccount(details[1].substring(0, 12));
+				t.setPayeeName(details[1].substring(12));
 
-			t.setPayeeAccount(details[2].substring(0, 12));
+				t.setPayeeAccount(details[2].substring(0, 12));
 
-			t.setAmount(Float.parseFloat(details[3]));
-			
-			if(t.status_of_transaction()) {
-				t.setStatus("Successful");
+				t.setAmount(Float.parseFloat(details[3]));
+
+				if (t.status_of_transaction()) {
+					t.setStatus("Successful");
+				} else {
+					t.setStatus("Failed");
+				}
+
+				ar.add(t);
 			}
-			else {
-				t.setStatus("Failed");
-			}
-
-			ar.add(t);
+		} catch (Exception e) {
+			log.info(e.getMessage());
 		}
 		br.close();
 		return ar;

@@ -26,7 +26,7 @@
         ${message}
       </div>
       <div style="align-items: center; padding-bottom:10px; padding-top:10px; padding-left: 120px;">
-        <a href="validtran"><button>View Valid Transactions</button></a>
+        <a href="validtran"><button>View Transactions</button></a>
       </div>   
       
   </div>
