@@ -128,9 +128,6 @@ public class validation {
 		int currentDay = 26;
 		int currentMonth = 10;
 		int currentYear = 2022;
-// System.out.println("\nCurrent : " + currentDay + currentMonth + currentYear +
-// "\nTransaction Date : " + day
-// + month + year);
 
 		if (day < currentDay || month < currentMonth || year < currentYear) {
 			dateBeforeFlag = true;// transactionDate before currentDate
